@@ -31,28 +31,28 @@ class Container:
 
 
 	def stop(self):
-		cmd = ['docker', 'stop', self.name]
+		cmd = ['sudo', 'docker', 'stop', self.name]
 		call_subp(cmd)
 
 	def time_stop(self):
-		cmd = ['time', 'docker', 'stop', self.name]
+		cmd = ['time', 'sudo', 'docker', 'stop', self.name]
 		call_subp(cmd)
 
 	def start(self):
-		cmd = ['docker', 'start', self.name]
+		cmd = ['sudo', 'docker', 'start', self.name]
 		call_subp(cmd)
 
 	def remove(self):
-		cmd = ['docker', 'rm', self.name]
+		cmd = ['sudo', 'docker', 'rm', self.name]
 		call_subp(cmd)
 
 	def logs(self, number):
-		cmd = ['docker', 'logs', '--tail='+str(number), '--details', '-t', self.name]
+		cmd = ['sudo', 'docker', 'logs', '--tail='+str(number), '--details', '-t', self.name]
 		call_subp(cmd)
 
 	@staticmethod
 	def list_all():
-		cmd = ['docker', 'container', 'ls', '--all']
+		cmd = ['sudo', 'docker', 'container', 'ls', '--all']
 		call_subp(cmd)
 		
 		

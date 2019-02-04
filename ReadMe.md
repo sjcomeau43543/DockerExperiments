@@ -34,22 +34,26 @@ Docker Splunk will continuously run when invoked because of the fact that it ope
 
 To test this, I created many different containers with different build images and different options put into the images. To test simple programs I used `alpine` and `hello-world`. To test running a program on an image I used `centos` and `/bin/bash`. To test opening ports and web servers I used `nginx` and `splunk`. 
 
-I also tested if docker command line options to `run` would affect the outcome of certain images. I tested `--detach` which claims to keep containers running in the background. **TODO MORE
+I also tested if docker command line options to `run` would affect the outcome of certain images. I tested `--detach` which claims to keep containers running in the background. I also tested `-t` which allocates a pseudo-tty.
 
 After creating the containers, I print the status of them, stop them, and start them again.
 Finally, I check the status one more time to see if they started running and were "revived".
 
 ### Testing
-| Image       | Options | Program | Outcome | TODO
+| Image       | Options | Program | Outcome |
 | ----------- | ------- | ------- | ------- |
-| alpine      | None | None | ------- |
-| alpine      | --detach | None | ------- |
-| centos      | --detach | /bin/bash | ------- |
-| hello-world | None | None | ------- | 
-| nginx       | --detach | None | ------- | 
-| splunk      | --detach (and some env variables) | None | ------- | 
+| alpine      | None | None | Did not revive |
+| alpine      | --detach | None | Did not revive |
+| alpine      | --detach, -t | None | Revived |
+| alpine      | -t | None | Revived |
+| centos      | --detach | /bin/bash | Did not revive |
+| hello-world | None | None | Did not revive | 
+| nginx       | --detach | None | Revived | 
+| splunk      | --detach (and some env variables) | None | Revived | 
 
+### Conclusion
 
+It seems as though only containers that run programs that will accept input or commands, such as opening a TCP port or a terminal in detach mode, will continue running after booting, and can be revived using `docker start <container>`.
 
 ## Part 2
 
@@ -61,7 +65,9 @@ This was an experiment to test what causes docker containers to take so long to 
 2. The second hypothesis is that the more complex they are (ex opening port, setting credentials) the longer it will take to stop
 
 ### Methodology
-TODO
+
+
+
 ### Testing
 
 TODO

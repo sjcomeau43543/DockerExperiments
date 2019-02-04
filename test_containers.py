@@ -2,8 +2,8 @@ from Container import Container
 import time
   
 def main():
-	part1 = 0
-	part2 = 1
+	part1 = 1
+	part2 = 0
 
 	containers = []
 
@@ -17,6 +17,14 @@ def main():
 	alpidetached = Container('alpidetached', 'alpine', None) # detached container, no program
 	alpidetached.run(['--detach'])
 	containers.append(alpidetached)
+
+	alpidetachedtty = Container('alpidetachedtty', 'alpine', None) # detached container, with tty ssh
+	alpidetachedtty.run(['--detach', '-t'])
+	containers.append(alpidetachedtty)
+
+	alpitty = Container('alpitty', 'alpine', None) # with tty ssh
+	alpitty.run(['-t'])
+	containers.append(alpitty)
 
 	# centos is a Linux distribution based on RedHat
 	centosdetached = Container('centosdetached', 'centos', '/bin/bash') # detached container, running bash

@@ -45,7 +45,6 @@ Finally, I check the status one more time to see if they started running and wer
 | alpine      | None | None | Did not revive |
 | alpine      | --detach | None | Did not revive |
 | alpine      | --detach, -t | None | Revived |
-| alpine      | -t | None | Revived |
 | centos      | --detach | /bin/bash | Did not revive |
 | hello-world | None | None | Did not revive | 
 | nginx       | --detach | None | Revived | 
@@ -57,17 +56,63 @@ It seems as though only containers that run programs that will accept input or c
 
 ## Part 2
 
-This was an experiment to test what causes docker containers to take so long to stop using `docker stop <container>`
+This was an experiment to mess around with Docker Networking.
+
+You can launch containers on your own personal network and I want to see how this compares to the default docker network, if it does.
+
+### Explanation
+
+Networking options
+1. Default docker bridge
+    - there is a container host
+    - iptables/NAT with linux kernel
+    - the  bridge will hold containers off of it
+    - the containers talking to each other happens over the bridge
+2. User defined bridge
+    - container host
+    - iptables/NAT with linux kernel
+    - user defined bridge(s)
+    - containers on the bridges with `--net` command
+    - this allows isolation between containers, containers on different bridges cannot talk to each other
+3. Overlay networking
+    - two container hosts
+    - both with iptables/NAT and bridges
+    - this allows VM's or hosts to connect to an overlay
+    - multihost network using the overlay rather than NATing to talk
+
+### Useful Commands
+`docker network ls`
+- shows the network
+- there is a default bridge, none, and host through docker originally
+
+`docker network create --driver bridge <name>`
+- creates a bridge network called isolated_nw
+
+`docker network inspect <name>`
+- shows the containers attached to the bridge and more information
+
+`brctl show`
+- shows the virtual bridges running
+- depends on bridge-utils
 
 ### Hypothesis
 
-1. The first hypothesis is that the longer they are running the longer it will take to stop
-2. The second hypothesis is that the more complex they are (ex opening port, setting credentials) the longer it will take to stop
+Using the user defined bridges will have more overhead because of the trade off of speed for security.
 
 ### Methodology
 
-
+Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers.
 
 ### Testing
 
-TODO
+| Image       | Options | Program | Outcome |
+| ----------- | ------- | ------- | ------- |
+| alpine      | None | None | Did not revive |
+| alpine      | --detach | None | Did not revive |
+| alpine      | --detach, -t | None | Revived |
+| centos      | --detach | /bin/bash | Did not revive |
+| hello-world | None | None | Did not revive | 
+| nginx       | --detach | None | Revived | 
+| splunk      | --detach (and some env variables) | None | Revived | 
+
+### Results

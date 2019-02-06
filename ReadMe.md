@@ -23,7 +23,9 @@ This was an experiment to test what docker containers would continue running if 
 
 ### Hypothesis
 
-A docker container that will continuously run when invoked will have one of the following qualities.
+A docker container will only continue running when "revived" if it is a container that will continously run when initially started.
+
+A docker container that will continuously run when initially started will have one of the following qualities.
 1. The docker container is running a program that will accept commands
 2. The docker container is opening a port that will accept commands 
 

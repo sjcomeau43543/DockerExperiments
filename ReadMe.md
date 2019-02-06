@@ -54,6 +54,8 @@ Finally, I check the status one more time to see if they started running and wer
 
 It seems as though only containers that run programs that will accept input or commands, such as opening a TCP port or a terminal in detach mode, will continue running after booting, and can be revived using `docker start <container>`.
 
+
+
 ## Part 2
 
 This was an experiment to mess around with Docker Networking.

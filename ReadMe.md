@@ -99,22 +99,17 @@ Networking options
 
 ### Hypothesis
 
-Using the user defined bridges will have more overhead because of the trade off of speed for security.
+Using the user defined bridges will have more overhead with simple docker commands because of the trade off of speed for security.
+(Also will probably have more overhead with handling requests on the containers themselves, but this wasn't tested)
 
 ### Methodology
 
-Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers.
+Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers (run, stop, start).
 
 ### Testing
 
-| Image       | Options | Program | Outcome |
-| ----------- | ------- | ------- | ------- |
-| alpine      | None | None | Did not revive |
-| alpine      | --detach | None | Did not revive |
-| alpine      | --detach, -t | None | Revived |
-| centos      | --detach | /bin/bash | Did not revive |
-| hello-world | None | None | Did not revive | 
-| nginx       | --detach | None | Revived | 
-| splunk      | --detach (and some env variables) | None | Revived | 
+![The comparison of times.](images/chart.png)
 
 ### Results
+
+Overall it seems like there is not much overhead with running things in their own network. However, more testing would need to be done to see if there is overhead within the container itself (aka handling requests, talking to other containers).

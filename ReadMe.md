@@ -41,21 +41,21 @@ I also tested if docker command line options to `run` would affect the outcome o
 After creating the containers, I print the status of them, stop them, and start them again.
 Finally, I check the status one more time to see if they started running and were "revived".
 
-### Testing
-| Image       | Options | Program | Outcome |
-| ----------- | ------- | ------- | ------- |
-| alpine      | None | None | Did not revive |
-| alpine      | --detach | None | Did not revive |
-| alpine      | --detach, -t | None | Revived |
-| centos      | --detach | /bin/bash | Did not revive |
-| hello-world | None | None | Did not revive | 
-| nginx       | --detach | None | Revived | 
-| splunk      | --detach (and some env variables) | None | Revived | 
+### Results
+
+| Image       | Options       | Program   | Initial State            | Outcome        |
+| ----------- | ------------- | --------- | ------------------------ | -------------- |
+| alpine      | None          | None      | Did not continuously run | Did not revive |
+| alpine      | --detach      | None      | Did not continuously run | Did not revive |
+| alpine      | --detach, -t  | None      | Continuously ran         | Revived        |
+| centos      | --detach      | /bin/bash | Did not continuously run | Did not revive |
+| hello-world | None          | None      | Did not continuously run | Did not revive | 
+| nginx       | --detach      | None      | Continuously ran         | Revived        | 
+| splunk      | --detach, -e  | None      | Continuously ran         | Revived        | 
 
 ### Conclusion
 
-It seems as though only containers that run programs that will accept input or commands, such as opening a TCP port or a terminal in detach mode, will continue running after booting, and can be revived using `docker start <container>`.
-
+The hypothesis seems to be correct. It seems as though only containers that run programs that will accept input or commands, such as opening a TCP port or a terminal in detach mode, will continue running after booting, and can be revived using `docker start <container>`.
 
 
 ## Part 2
@@ -101,17 +101,34 @@ Networking options
 
 ### Hypothesis
 
-Using the user defined bridges will have more overhead with simple docker commands because of the trade off of speed for security.
+Using the user defined bridges will have more overhead with simple docker commands because of the trade off of speed for security than the default docker bridge will.
 (Also will probably have more overhead with handling requests on the containers themselves, but this wasn't tested)
 
 ### Methodology
 
 Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers (run, stop, start).
 
-### Testing
+### Results
 
 ![The comparison of times.](images/chart.png)
 
-### Results
+| Image       | Options       | Program   | Network | Run Time | Stop Time | Start Time |
+| ----------- | ------------- | --------- | ------- | -------- | --------- | ---------- |
+| alpine      | None          | None      | Default | -------- | --------- | ---------- |
+| alpine      | None          | None      | Private | -------- | --------- | ---------- |
+| alpine      | --detach      | None      | Default | -------- | --------- | ---------- |
+| alpine      | --detach      | None      | Private | -------- | --------- | ---------- |
+| alpine      | --detach, -t  | None      | Default | -------- | --------- | ---------- |
+| alpine      | --detach, -t  | None      | Private | -------- | --------- | ---------- |
+| centos      | --detach      | /bin/bash | Default | -------- | --------- | ---------- |
+| centos      | --detach      | /bin/bash | Private | -------- | --------- | ---------- |
+| hello-world | None          | None      | Default | -------- | --------- | ---------- |
+| hello-world | None          | None      | Private | -------- | --------- | ---------- |
+| nginx       | --detach      | None      | Default | -------- | --------- | ---------- |
+| nginx       | --detach      | None      | Private | -------- | --------- | ---------- |
+| splunk      | --detach, -e  | None      | Default | -------- | --------- | ---------- |
+| splunk      | --detach, -e  | None      | Private | -------- | --------- | ---------- |
+
+### Conclusion
 
 Overall it seems like there is not much overhead with running things in their own network. However, more testing would need to be done to see if there is overhead within the container itself (aka handling requests, talking to other containers).

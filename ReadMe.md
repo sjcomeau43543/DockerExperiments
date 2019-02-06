@@ -106,13 +106,11 @@ Using the user defined bridges will have more overhead with simple docker comman
 
 ### Methodology
 
-Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers (run, stop, start).
+Attach containers to the default bridge and to a user defined bridge and measure the speed it takes to run docker commands on the containers (run, stop, start). I did this 5 times and averaged the results to remove the potential for any outliers in the data.
 
 ### Results
 
 ![The comparison of times.](images/chart.png)
-
-This was run 5 times then averaged.
 
 ### Conclusion
 

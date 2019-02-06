@@ -112,22 +112,22 @@ Attach containers to the default bridge and to a user defined bridge and measure
 
 ![The comparison of times.](images/chart.png)
 
-| Image       | Options       | Program   | Network | Run Time | Stop Time | Start Time |
-| ----------- | ------------- | --------- | ------- | -------- | --------- | ---------- |
-| alpine      | None          | None      | Default | -------- | --------- | ---------- |
-| alpine      | None          | None      | Private | -------- | --------- | ---------- |
-| alpine      | --detach      | None      | Default | -------- | --------- | ---------- |
-| alpine      | --detach      | None      | Private | -------- | --------- | ---------- |
-| alpine      | --detach, -t  | None      | Default | -------- | --------- | ---------- |
-| alpine      | --detach, -t  | None      | Private | -------- | --------- | ---------- |
-| centos      | --detach      | /bin/bash | Default | -------- | --------- | ---------- |
-| centos      | --detach      | /bin/bash | Private | -------- | --------- | ---------- |
-| hello-world | None          | None      | Default | -------- | --------- | ---------- |
-| hello-world | None          | None      | Private | -------- | --------- | ---------- |
-| nginx       | --detach      | None      | Default | -------- | --------- | ---------- |
-| nginx       | --detach      | None      | Private | -------- | --------- | ---------- |
-| splunk      | --detach, -e  | None      | Default | -------- | --------- | ---------- |
-| splunk      | --detach, -e  | None      | Private | -------- | --------- | ---------- |
+| Image       | Options       | Program   | Network | Run Time | Start Time | Stop Time |
+| ----------- | ------------- | --------- | ------- | -------- | --------- | --------- |
+| alpine      | None          | None      | Default | 9.751803 | 4.154459 | 0.4083778 |
+| alpine      | None          | None      | Private | 3.684877 | 3.840153 | 0.2059159 |
+| alpine      | --detach      | None      | Default | 1.527438 | 3.075648 | 0.1209771 |
+| alpine      | --detach      | None      | Private | 1.937846 | 4.416459 | 0.1793918 |
+| alpine      | --detach, -t  | None      | Default | 1.881986 | 8.285915 | 12.315455 |
+| alpine      | --detach, -t  | None      | Private | 2.849634 | 6.579818 | 13.614001 |
+| centos      | --detach      | /bin/bash | Default | 1.965165 | 2.557228 | 0.1521730 |
+| centos      | --detach      | /bin/bash | Private | 5.624694 | 1.987426 | 0.0994250 |
+| hello-world | None          | None      | Default | 3.140285 | 2.907007 | 0.6610169 |
+| hello-world | None          | None      | Private | 5.300642 | 3.150263 | 0.4478509 |
+| nginx       | --detach      | None      | Default | 1.908318 | 10.81148 | 11.056098 |
+| nginx       | --detach      | None      | Private | 3.453531 | 2.667370 | 2.3333859 |
+| splunk      | --detach, -e  | None      | Default | 3.246040 | 5.366030 | 16.968418 |
+| splunk      | --detach, -e  | None      | Private | 2.855946 | 3.492327 | 13.140911 |
 
 ### Conclusion
 

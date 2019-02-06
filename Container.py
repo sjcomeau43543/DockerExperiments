@@ -1,4 +1,5 @@
 import subprocess, time
+import numpy as np
 
 def call_subp(cmd):
 	print 'Calling: ', cmd
@@ -14,9 +15,12 @@ class Container:
 	service = None
 	program = None
 	network = None
-	run_time = None
-	start_time = None
-	stop_time = None
+	run_time_average = None
+	start_time_average = None
+	stop_time_average = None
+	run_times = np.array([])
+	start_times = np.array([])
+	stop_times = np.array([])
 
 	def __init__(self, name, service, program, network_name):
 		self.name = name
@@ -43,20 +47,29 @@ class Container:
 
 		start = time.time()
 		call_subp(cmd)
-		self.run_time = time.time() - start
+		self.run_times = np.append(self.run_times, [time.time() - start])
 
 
 	def stop(self):
 		cmd = ['sudo', 'docker', 'stop', self.name]
 		start = time.time()
 		call_subp(cmd)
-		self.stop_time = time.time() - start
+		self.stop_times = np.append(self.stop_times, [time.time() - start])
 
 	def start(self):
 		cmd = ['sudo', 'docker', 'start', self.name]
 		start = time.time()
 		call_subp(cmd)
-		self.start_time = time.time() - start
+		self.start_times = np.append(self.start_times, [time.time() - start])
+
+	def calculate_averages(self):
+		print 'Averaging...'
+		self.run_time_average = np.average(self.run_times)
+		self.start_time_average = np.average(self.start_times)
+		self.stop_time_average = np.average(self.stop_times)
+		print str(self.run_times), ':average:', self.run_time_average
+		print str(self.start_times), ':average:', self.start_time_average
+		print str(self.stop_times), ':average:', self.stop_time_average
 
 	def remove(self):
 		cmd = ['sudo', 'docker', 'rm', self.name]
@@ -81,6 +94,11 @@ class Container:
 		if network_name is None:
 			network_name = 'bridge' # default network name
 		cmd = ['sudo', 'docker', 'network', 'inspect', network_name]
+		call_subp(cmd)
+
+	@staticmethod
+	def remove_network(network_name):
+		cmd = ['sudo', 'docker', 'network', 'rm', network_name]
 		call_subp(cmd)
 		
 		

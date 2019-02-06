@@ -69,7 +69,7 @@ def part1():
     cleanup_containers(containers)
 
 def part2():  
-    #Container.create_private_network('isolated_nw')
+    Container.create_private_network('isolated_nw')
     containers_default = setup_containers(None) # time how long the default network takes
     containers_private = setup_containers('isolated_nw') # time how long the private network takes
 
@@ -77,12 +77,20 @@ def part2():
     Container.inspect_network('isolated_nw')
 
     # stop and start each container so we can see how long it takes
+    for i in range(5):
+      print 'Calculating for the ', i, 'th time'
+      for container in containers_default:
+          container.stop()
+          container.start()
+      for container in containers_private:
+          container.stop()
+          container.start()
+
+    # average the results
     for container in containers_default:
-        container.stop()
-        container.start()
+      container.calculate_averages()
     for container in containers_private:
-        container.stop()
-        container.start()
+      container.calculate_averages()
 
     run_times = np.array([])
     stop_times = np.array([])
@@ -93,13 +101,13 @@ def part2():
 
     # put all the times in lists so we can plot them
     for container in containers_default:
-        run_times = np.append(run_times, [container.run_time])
-        stop_times = np.append(stop_times, [container.stop_time])
-        start_times = np.append(start_times, [container.start_time])
+        run_times = np.append(run_times, [container.run_time_average])
+        stop_times = np.append(stop_times, [container.stop_time_average])
+        start_times = np.append(start_times, [container.start_time_average])
     for container in containers_private:
-        run_times_private = np.append(run_times_private, [container.run_time])
-        stop_times_private = np.append(stop_times_private, [container.stop_time])
-        start_times_private = np.append(start_times_private, [container.start_time])
+        run_times_private = np.append(run_times_private, [container.run_time_average])
+        stop_times_private = np.append(stop_times_private, [container.stop_time_average])
+        start_times_private = np.append(start_times_private, [container.start_time_average])
     
     # plot using matplotlib
     plt.plot(run_times, color='darkblue', label='run time default network')
@@ -113,16 +121,17 @@ def part2():
     plt.ylabel('Time(s)')
     plt.xlabel('Container')
     plt.xticks([0,1,2,3,4,5,6], ['a','b','c','d','e','f','g'])
-    plt.title('Comparing container run/start/stop times based on the network they are attached to')
+    plt.title('Comparing container run/stop/start times based on the network they are attached to')
     plt.show()
 
     cleanup_containers(containers_default)
     cleanup_containers(containers_private)
+    Container.remove_network('isolated_nw')
 
 def main():
 
     # Part 1. Testing what docker containers can be 'revived' through starting them after they are stopped
-    # part1()
+    part1()
 
     # Part 2. Testing the trade off between security and time for the docker networking options
     part2()

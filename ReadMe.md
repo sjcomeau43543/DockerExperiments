@@ -116,4 +116,4 @@ This was run 5 times then averaged.
 
 ### Conclusion
 
-As we can see, the only major difference is that some of the containers take about 5 seconds longer to start. Overall it seems like there is not much overhead with running things in their own network. However, more testing would need to be done to see if there is overhead within the container itself (aka handling requests, talking to other containers).
+As we can see, the only major difference is that some of the containers take about 5 seconds longer to run and only slightly longer to start. Overall it seems like there is not much overhead with running things in their own network. However, more testing would need to be done to see if there is overhead within the container itself (aka handling requests, talking to other containers).
